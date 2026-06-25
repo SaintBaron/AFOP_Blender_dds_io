@@ -1607,6 +1607,7 @@ def _fix_broken_stf_image(image):
             pass
 
 
+@bpy.app.handlers.persistent
 def _scan_images(*_args):
     """Depsgraph/load-post handler: repair any newly opened STF .dds images."""
     if _IMPORT_ERROR is not None:
@@ -1623,6 +1624,8 @@ def register():
         bpy.app.handlers.load_post.append(_scan_images)
     if _IMPORT_ERROR is not None:
         print(f"[AFoP STF] WARNING: decoder failed to initialise: {_IMPORT_ERROR}")
+    else:
+        _scan_images()  # handle images already present in the scene
 
 
 def unregister():
